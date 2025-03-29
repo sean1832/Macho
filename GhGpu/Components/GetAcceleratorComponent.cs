@@ -9,12 +9,12 @@ using GhGpu.Params;
 
 namespace GhGpu.Components
 {
-    public class GetAccelerator : GH_Component
+    public class GetAcceleratorComponent : GH_Component
     {
-        public GetAccelerator()
-            : base("GetAccelerator", "Accelerator",
+        public GetAcceleratorComponent()
+            : base("Get Accelerator", "Accelerator",
                 "Defines accelerator context",
-                "ILGPU", "Context")
+                Config.Category, Config.SubCat.Operation)
         {
             Instances.DocumentServer.DocumentRemoved += OnDocumentClose;
         }

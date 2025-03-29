@@ -1,0 +1,15 @@
+<Project>
+	<!-- Exclude Template directory and copy to output directory  -->
+	<ItemGroup>
+	  <!-- Remove .cs files from compilation -->
+	  <Compile Remove="Template\**\*.cs" />
+	  <!-- Add .cs files as None so they show up -->
+	  <None Include="Template\**\*.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <!-- Add all other files -->
+	  <None Include="Template\**\*" Exclude="Template\**\*.cs">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	</ItemGroup>
+</Project>
