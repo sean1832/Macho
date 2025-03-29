@@ -16,14 +16,9 @@ namespace GhGpu.CodeEditor
 {
     class CSharpEditorDialog : Form
     {
-
-        private bool isClosed;
         CodeEditorControl _editor;
         ListBox _errorList;
         private readonly string _originalCode;
-
-
-        public event Action EditorClosed;
 
         public string Code { get; private set; }
         public bool Canceled { get; private set; }
@@ -114,13 +109,6 @@ namespace GhGpu.CodeEditor
             }
         }
             };
-        }
-
-        protected virtual void OnClosed(EventArgs e)
-        {
-            OnClosed(e);
-            this.isClosed = true;
-            Action editorClosed = this;
         }
 
         protected override void OnShown(EventArgs e)
@@ -239,19 +227,19 @@ public static class KernelInstance
             }
         }
 
-        //protected override async void OnClosed(EventArgs e)
-        //{
-        //    try
-        //    {
-        //        Code = Canceled ? _originalCode : await _editor.GetTextAsync();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Code = _originalCode;
-        //        await ShowMessageAsync("Save Error", ex.Message);
-        //    }
-        //    base.OnClosed(e);
-        //}
+        protected override async void OnClosed(EventArgs e)
+        {
+            try
+            {
+                Code = Canceled ? _originalCode : await _editor.GetTextAsync();
+            }
+            catch (Exception ex)
+            {
+                Code = _originalCode;
+                await ShowMessageAsync("Save Error", ex.Message);
+            }
+            base.OnClosed(e);
+        }
 
         private async Task ShowMessageAsync(string title, string message)
         {

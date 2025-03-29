@@ -8,6 +8,10 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Ed.Eto;
+using ILGPU;
+using DiagnosticSeverity = Microsoft.CodeAnalysis.DiagnosticSeverity;
+using OptimizationLevel = Microsoft.CodeAnalysis.OptimizationLevel;
 
 namespace GhGpu.CodeEditor
 {
