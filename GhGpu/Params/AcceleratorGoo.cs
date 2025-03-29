@@ -8,16 +8,16 @@ using ILGPU.Runtime;
 
 namespace GhGpu.Params
 {
-    public class AcceleratorGoo : GH_Goo<AcceleratorIndex>, IDisposable
+    public class AcceleratorGoo : GH_Goo<Accelerator>, IDisposable
     {
         public AcceleratorGoo()
         {
             Value = null;
         }
 
-        public AcceleratorGoo(AcceleratorIndex acceleratorIndex)
+        public AcceleratorGoo(Accelerator accelerator)
         {
-            Value = acceleratorIndex;
+            Value = accelerator;
         }
 
         public override IGH_Goo Duplicate()
@@ -27,7 +27,7 @@ namespace GhGpu.Params
 
         public override string ToString()
         {
-            return $"Accelerator [{Value.Index}:{Value.Name}]";
+            return $"Accelerator [Name:{Value.Device.Name}, Capabilities:{Value.Device.Capabilities}]";
         }
 
         public override bool IsValid
@@ -35,19 +35,18 @@ namespace GhGpu.Params
             get
             {
                 if (Value == null) return false;
-                if (Value.Index < 0) return false;
                 if (string.IsNullOrEmpty(Value.Name)) return false;
                 return true;
             }
         }
 
-        public override string TypeName => "AcceleratorIndex";
+        public override string TypeName => "Accelerator";
 
-        public override string TypeDescription => "AcceleratorIndex";
+        public override string TypeDescription => "Accelerator";
 
         public void Dispose()
         {
-            Value = null;
+            Value.Dispose();
         }
     }
 }

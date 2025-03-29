@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using GhGpu.Gpu;
 using GhGpu.Params;
+using ILGPU;
+using ILGPU.Runtime;
 
 namespace GhGpu.Components
 {
@@ -46,45 +48,45 @@ namespace GhGpu.Components
 
         private void OnDocumentClose(GH_DocumentServer sender, GH_Document doc)
         {
+            // If multiple components rely on GpuManager, ensure that Dispose is called only once at the proper time.
+            GpuContext.Dispose();
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             int deviceIndex = 0;
             if (!DA.GetData(0, ref deviceIndex)) return;
-            if (deviceIndex < 0)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Device index must be greater than 0");
-                DA.AbortComponentSolution();
-                return;
-            }
-
             try
             {
-                using var deviceContext = new GpuContext(deviceIndex);
-                var devices = deviceContext.GetDeviceNames();
-                string device = null;
-                string[] devicesName = new string[devices.Length];
-
-                for (int i = 0; i < devices.Length; i++)
+                // Retrieve all device names from the shared context.
+                string[] devicesName = GpuContext.GetDeviceNames();
+                if (deviceIndex < 0 || deviceIndex >= devicesName.Length)
                 {
-                    devicesName[i] = devices[i];
-                    if (i == deviceIndex)
-                    {
-                        device = devices[i];
-                    }
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error,
+                        $"Device index must be between 0 and {devicesName.Length - 1}");
+                    DA.AbortComponentSolution();
+                    return;
                 }
 
-                Message = devicesName[deviceIndex];
+                // Retrieve the accelerator for the selected device.
+                Accelerator accelerator = GpuContext.GetAccelerator(deviceIndex);
+                Message = $"{deviceIndex}: {devicesName[deviceIndex]}";
 
                 DA.SetDataList(0, devicesName);
-                DA.SetData(1, new AcceleratorGoo(new AcceleratorIndex(deviceIndex, device)));
+                DA.SetData(1, new AcceleratorGoo(accelerator));
             }
-            catch (IndexOutOfRangeException)
+            catch (Exception e)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, $"Error: Invalid device index. Please ensure you select a valid index based on the available devices.");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, $"Error: {e.Message}");
                 DA.AbortComponentSolution();
             }
+        }
+
+        public override void RemovedFromDocument(GH_Document document)
+        {
+            // Unsubscribe from document events when the component is removed.
+            Instances.DocumentServer.DocumentRemoved -= OnDocumentClose;
+            base.RemovedFromDocument(document);
         }
     }
 }

@@ -66,6 +66,6 @@
     </ItemGroup>
 
 	<!-- Exclude Template directory and copy to output directory  -->
-	<Import Project="TemplateManagement.targets"/>
+	<Import Project="TemplateManagement.targets" />
 
 </Project>
