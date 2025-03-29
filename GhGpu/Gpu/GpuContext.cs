@@ -8,6 +8,9 @@ using ILGPU;
 
 namespace GhGpu.Gpu
 {
+    /// <summary>
+    /// Provides a shared context and accelerator management.
+    /// </summary>
     public static class GpuContext
     {
         // The shared context instance.
@@ -17,7 +20,9 @@ namespace GhGpu.Gpu
         // Lock for thread safety.
         private static readonly object Lock = new object();
 
-        // Gets or creates the shared context.
+        /// <summary>
+        /// Gets or creates the shared context.
+        /// </summary>
         public static Context SharedContext
         {
             get
@@ -34,7 +39,12 @@ namespace GhGpu.Gpu
             }
         }
 
-        // Returns the accelerator for the specified device index, creating it if necessary.
+        /// <summary>
+        /// Returns the accelerator for the specified device index, creating it if necessary.
+        /// </summary>
+        /// <param name="deviceIndex">Index of device</param>
+        /// <returns>Accelerator at device index</returns>
+        /// <exception cref="IndexOutOfRangeException"></exception>
         public static Accelerator GetAccelerator(int deviceIndex)
         {
             lock (Lock)
@@ -55,7 +65,10 @@ namespace GhGpu.Gpu
             }
         }
 
-        // Returns an array of device names.
+        /// <summary>
+        /// Get all available device names.
+        /// </summary>
+        /// <returns>An array of device names.</returns>
         public static string[] GetDeviceNames()
         {
             lock (Lock)
@@ -64,7 +77,9 @@ namespace GhGpu.Gpu
             }
         }
 
-        // Dispose of the shared resources. This should be called at a central point (e.g., on document shutdown).
+        /// <summary>
+        /// Dispose of the shared resources. This should be called at a central point (e.g., on document shutdown).
+        /// </summary>
         public static void Dispose()
         {
             lock (Lock)
