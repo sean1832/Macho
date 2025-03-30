@@ -3,14 +3,14 @@
  * Source: https://github.com/camnewnham/HotLoader/blob/main/Plugin/HotComponentPlaceholder.cs
  * Licensed under the MIT License.
  * Original copyright (c) 2023 camnewnham.
- * Modifications made for GhGpu.CodeEditor under the Apache-2.0 License.
+ * Modifications made for Macho.CodeEditor under the Apache-2.0 License.
  */
 
 using Grasshopper.Kernel;
 using System.IO;
 using System.Windows.Forms;
 
-namespace GhGpu.CodeEditor
+namespace Macho.CodeEditor
 {
     public class CodeEditorPlaceholder : CodeEditorBase
     {

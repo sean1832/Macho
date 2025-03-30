@@ -4,12 +4,12 @@ using Rhino.Geometry;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
-using GhGpu.Gpu;
-using GhGpu.Params;
+using Macho.Gpu;
+using Macho.Params;
 using ILGPU;
 using ILGPU.Runtime;
 
-namespace GhGpu.Components
+namespace Macho.Components
 {
     public class AcceleratorManagerComponent : GH_Component
     {

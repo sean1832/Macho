@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ILGPU;
 
-namespace GhGpu.Gpu
+namespace Macho.Gpu
 {
     /// <summary>
     /// Provides a shared context and accelerator management.

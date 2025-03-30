@@ -1,10 +1,10 @@
-﻿using GhGpu.CodeEditor;
-using GhGpu.Params;
+﻿using Macho.CodeEditor;
+using Macho.Params;
 using Grasshopper.Kernel;
 using ILGPU;
 using ILGPU.Runtime;
 
-namespace GhGpu.Components
+namespace Macho.Components
 {
     public abstract class KernelScriptBase(string name, string nickname, string description)
         : CodeEditorBase(name, nickname, description)

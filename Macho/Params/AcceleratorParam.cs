@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ILGPU.Runtime;
 
-namespace GhGpu.Params
+namespace Macho.Params
 {
     public class AcceleratorParam() : GH_PersistentParam<AcceleratorGoo>(
         "Accelerator Index", "AcceleratorIdx",

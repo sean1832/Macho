@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ILGPU.Runtime;
 
-namespace GhGpu.Params
+namespace Macho.Params
 {
     public class AcceleratorGoo : GH_Goo<Accelerator>
     {

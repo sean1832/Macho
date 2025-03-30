@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GhGpu
+namespace Macho
 {
     internal static class Config
     {

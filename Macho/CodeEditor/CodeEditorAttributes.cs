@@ -3,7 +3,7 @@
  * Source: https://github.com/camnewnham/HotLoader/blob/main/Plugin/HotComponentAttributes.cs
  * Licensed under the MIT License.
  * Original copyright (c) 2023 camnewnham.
- * Modifications made for GhGpu.CodeEditor under the Apache-2.0 License.
+ * Modifications made for Macho.CodeEditor under the Apache-2.0 License.
  */
 
 using Grasshopper.GUI.Canvas;
@@ -12,7 +12,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
 using System;
 
-namespace GhGpu.CodeEditor
+namespace Macho.CodeEditor
 {
     internal class CodeEditorAttributes : GH_ComponentAttributes
     {

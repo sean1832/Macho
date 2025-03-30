@@ -8,7 +8,7 @@
       "args": [
         "build",
         "-clp:NoSummary",
-        "${workspaceFolder}/GhGpu.csproj"
+        "${workspaceFolder}/Macho.csproj"
       ],
       "problemMatcher": "$msCompile",
       "presentation": {

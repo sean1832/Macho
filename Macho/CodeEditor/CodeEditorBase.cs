@@ -3,7 +3,7 @@
  * Source: https://github.com/camnewnham/HotLoader/blob/main/Plugin/HotComponentBase.cs
  * Licensed under the MIT License.
  * Original copyright (c) 2023 camnewnham.
- * Modifications made for GhGpu.CodeEditor under the Apache-2.0 License.
+ * Modifications made for Macho.CodeEditor under the Apache-2.0 License.
  */
 
 using GH_IO.Serialization;
@@ -17,7 +17,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 
-namespace GhGpu.CodeEditor
+namespace Macho.CodeEditor
 {
     public abstract class CodeEditorBase(string name, string nickname, string description)
         : GH_Component(name, nickname, description, Config.Category, Config.SubCat.Operation)

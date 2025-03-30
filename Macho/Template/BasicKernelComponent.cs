@@ -1,6 +1,6 @@
 ﻿using System;
 using Grasshopper.Kernel;
-using GhGpu.Components;
+using Macho.Components;
 using ILGPU;
 using ILGPU.Runtime;
 using System.Collections.Generic;
