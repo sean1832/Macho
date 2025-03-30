@@ -20,7 +20,6 @@ public class BasicKernelComponent()
     protected override void RegisterOutputParams(GH_OutputParamManager pManager)
     {
         pManager.AddNumberParameter("Result", "R", "Accumulated result", GH_ParamAccess.item);
-        pManager.AddTextParameter("Elapsed Time", "T", "Time measurements", GH_ParamAccess.list);
     }
 
     private static Action<Index1D, double, ArrayView<double>> _cachedKernel;
@@ -35,8 +34,6 @@ public class BasicKernelComponent()
 
     protected override void ExecuteKernel(IGH_DataAccess DA)
     {
-        List<string> elapsed = new List<string>();
-
         double seed = 0.0;
         int totalThreads = 0;
         if (!DA.GetData(1, ref seed)) return;
@@ -60,6 +57,5 @@ public class BasicKernelComponent()
 
         // Output the accumulated result and the elapsed time metrics.
         DA.SetData(0, result[0]);
-        DA.SetDataList(1, elapsed);
     }
 }
