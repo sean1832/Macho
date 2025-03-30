@@ -8,12 +8,12 @@ namespace GhGpu
 {
     internal static class Config
     {
-        public static string Category = "GhGpu";
+        public static string Category = "ILGPU";
 
         public static class SubCat
         {
-            public static readonly string Utils = "0.utils";
-            public static readonly string Scripting = "1.scripting";
+            public static readonly string Param = "0.Param";
+            public static readonly string Operation = "1.Operation";
         }
 
     }

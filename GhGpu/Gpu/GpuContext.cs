@@ -8,47 +8,90 @@ using ILGPU;
 
 namespace GhGpu.Gpu
 {
-    internal class GpuContext: IDisposable
+    /// <summary>
+    /// Provides a shared context and accelerator management.
+    /// </summary>
+    public static class GpuContext
     {
-        private Accelerator _accelerator;
-        private Context _context;
+        // The shared context instance.
+        private static Context _context;
+        // Cache for accelerators per device index.
+        private static readonly Dictionary<int, Accelerator> Accelerators = new Dictionary<int, Accelerator>();
+        // Lock for thread safety.
+        private static readonly object Lock = new object();
 
-        public GpuContext(int index)
+        /// <summary>
+        /// Gets or creates the shared context.
+        /// </summary>
+        public static Context SharedContext
         {
-            CreateContext();
-            Init(index);
-        }
-        public Accelerator GetAccelerator()
-        {
-            return _accelerator;
-        }
-
-        public string[] GetDeviceNames()
-        {
-            var devices = _context.Devices;
-            var names = new string[devices.Length];
-            for (int i = 0; i < devices.Length; i++)
+            get
             {
-                names[i] = devices[i].Name;
+                if (_context != null) return _context;
+                lock (Lock)
+                {
+                    if (_context == null)
+                    {
+                        _context = Context.Create(b => b.Default().EnableAlgorithms());
+                    }
+                }
+                return _context;
             }
-            return names;
         }
 
-        private void Init(int index)
+        /// <summary>
+        /// Returns the accelerator for the specified device index, creating it if necessary.
+        /// </summary>
+        /// <param name="deviceIndex">Index of device</param>
+        /// <returns>Accelerator at device index</returns>
+        /// <exception cref="IndexOutOfRangeException"></exception>
+        public static Accelerator GetAccelerator(int deviceIndex)
         {
+            lock (Lock)
+            {
+                if (!Accelerators.ContainsKey(deviceIndex))
+                {
+                    // Validate the device index against the available devices.
+                    if (deviceIndex < 0 || deviceIndex >= SharedContext.Devices.Length)
+                    {
+                        throw new IndexOutOfRangeException($"Device index must be between 0 and {SharedContext.Devices.Length - 1}");
+                    }
 
-            _accelerator = _context.Devices[index].CreateAccelerator(_context);
+                    // Create and cache the accelerator.
+                    Accelerator accelerator = SharedContext.Devices[deviceIndex].CreateAccelerator(SharedContext);
+                    Accelerators[deviceIndex] = accelerator;
+                }
+                return Accelerators[deviceIndex];
+            }
         }
 
-        private void CreateContext()
+        /// <summary>
+        /// Get all available device names.
+        /// </summary>
+        /// <returns>An array of device names.</returns>
+        public static string[] GetDeviceNames()
         {
-            _context = Context.Create(builder => builder.AllAccelerators());
+            lock (Lock)
+            {
+                return SharedContext.Devices.Select(device => device.Name).ToArray();
+            }
         }
 
-        public void Dispose()
+        /// <summary>
+        /// Dispose of the shared resources. This should be called at a central point (e.g., on document shutdown).
+        /// </summary>
+        public static void Dispose()
         {
-            _accelerator?.Dispose();
-            _context?.Dispose();
+            lock (Lock)
+            {
+                foreach (var accelerator in Accelerators.Values)
+                {
+                    accelerator.Dispose();
+                }
+                Accelerators.Clear();
+                _context?.Dispose();
+                _context = null;
+            }
         }
     }
 }

@@ -1,0 +1,52 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net48</TargetFramework>
+    <RootNamespace>$(SolutionName)</RootNamespace>
+    <Configurations>Debug;Develop;Release</Configurations>
+    <LangVersion>12.0</LangVersion>
+	<!-- Change the extension so that we can watch it easily -->
+	<TargetExt>.ghc</TargetExt>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  
+  <PropertyGroup Condition="'$(Configuration)'=='Develop'">
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grasshopper" Version="8.0.23304.9001">
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+	  <PackageReference Include="ILGPU" Version="1.5.2" >
+		  <ExcludeAssets>runtime</ExcludeAssets>
+	  </PackageReference>
+    <PackageReference Include="ILGPU.Algorithms" Version="1.5.2" >
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
+  </ItemGroup>
+  
+  <ItemGroup Condition="'$(Configuration)'!='Develop'">
+    <Reference Include="HotComponent">
+      <HintPath>..\Plugin\bin\HotLoader.gha</HintPath>
+      <Private>False</Private>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(Configuration)'=='Develop'">
+    <ProjectReference Include="..\Plugin\HotLoader.csproj">
+      <Private>False</Private>
+    </ProjectReference>
+  </ItemGroup>
+
+	<!-- Copy to output directory  -->
+	<Target Name="SetOutputDir" BeforeTargets="BeforeBuild">
+		<PropertyGroup>
+			<OutDir>$(ProjectDir)\bin\$([System.DateTime]::Now.ToFileTimeUtc())\</OutDir>
+		</PropertyGroup>
+		<Message Text="Output directory set to: $(OutDir)" Importance="high" />
+	</Target>
+</Project>
