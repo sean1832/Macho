@@ -12,10 +12,9 @@ using System.Windows.Forms;
 
 namespace Macho.CodeEditor
 {
-    public class CodeEditorPlaceholder : CodeEditorBase
+    public class CodeEditorPlaceholder()
+        : CodeEditorBase("Custom GPU Kernel", "Kernel", "A custom component written in C#")
     {
-        public CodeEditorPlaceholder() : base("Custom GPU Kernel", "Kernel", "A custom component written in C#") { }
-
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "This is a placeholder. Double click to edit the source code with your native C# editor.");
