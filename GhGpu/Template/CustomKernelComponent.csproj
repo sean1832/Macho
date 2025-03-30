@@ -4,6 +4,7 @@
     <TargetFramework>net48</TargetFramework>
     <RootNamespace>$(SolutionName)</RootNamespace>
     <Configurations>Debug;Develop;Release</Configurations>
+    <LangVersion>12.0</LangVersion>
 	<!-- Change the extension so that we can watch it easily -->
 	<TargetExt>.ghc</TargetExt>
   </PropertyGroup>
@@ -23,6 +24,9 @@
 	  <PackageReference Include="ILGPU" Version="1.5.2" >
 		  <ExcludeAssets>runtime</ExcludeAssets>
 	  </PackageReference>
+    <PackageReference Include="ILGPU.Algorithms" Version="1.5.2" >
+      <ExcludeAssets>runtime</ExcludeAssets>
+    </PackageReference>
   </ItemGroup>
   
   <ItemGroup Condition="'$(Configuration)'!='Develop'">

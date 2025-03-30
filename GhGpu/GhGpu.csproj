@@ -28,6 +28,7 @@
         <!-- 8.0.23304.9001 -->
         <PackageReference Include="Grasshopper" Version="8.0.23304.9001" ExcludeAssets="runtime" />
         <PackageReference Include="ILGPU" Version="1.5.2" />
+        <PackageReference Include="ILGPU.Algorithms" Version="1.5.2" />
     </ItemGroup>
     <!-- For Windows only builds -->
     <PropertyGroup Condition="$(TargetFramework.Contains('-windows')) or $(TargetFramework.StartsWith('net4'))">
