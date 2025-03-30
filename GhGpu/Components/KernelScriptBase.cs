@@ -15,7 +15,7 @@ namespace GhGpu.Components
         protected Accelerator Accelerator { get; private set; }
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddParameter(new AcceleratorParam(), "Accelerator", "Ac", "Accelerator to execute on",
+            pManager.AddParameter(new AcceleratorParam(), "Accelerator", "A", "Accelerator to execute on",
                 GH_ParamAccess.item);
         }
 
