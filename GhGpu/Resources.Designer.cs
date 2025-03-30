@@ -59,15 +59,5 @@ namespace GhGpu {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] Kernel_Edit_Template {
-            get {
-                object obj = ResourceManager.GetObject("Kernel_Edit_Template", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }
