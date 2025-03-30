@@ -1,77 +1,65 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Xml.Schema;
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-using GhGpu;
 using GhGpu.Components;
 using ILGPU;
 using ILGPU.Runtime;
-using ILGPU.Runtime.CPU;
-using System.Diagnostics;
-using ILGPU.Runtime.Cuda;
+using System.Collections.Generic;
 
-public class BasicKernelComponent : KernelScriptBase
+namespace CustomKernelComponent;
+
+public class BasicKernelComponent()
+    : KernelScriptBase("GPU Kernel Component", "GPU Benchmark", "GPU kernel with low per-thread complexity")
 {
-    public BasicKernelComponent()
-        : base("Custom Kernel Component", "Custom", "My custom kernel component")
-    {
-    }
     protected override void RegisterInputParams(GH_InputParamManager pManager)
     {
-        // Register the accelerator input from the base class.
         base.RegisterInputParams(pManager);
-        // Add custom input parameters.
-        pManager.AddIntegerParameter("Data Size", "N", "Number of elements to process", GH_ParamAccess.item);
+        pManager.AddNumberParameter("Seed", "D", "Input seed value", GH_ParamAccess.item);
+        pManager.AddIntegerParameter("Total Iterations", "I", "Total Iteration", GH_ParamAccess.item);
     }
 
     protected override void RegisterOutputParams(GH_OutputParamManager pManager)
     {
-        pManager.AddNumberParameter("Result", "R", "The output", GH_ParamAccess.list);
-        pManager.AddTextParameter("Elapsed Time", "T", "Time taken in ms", GH_ParamAccess.item);
+        pManager.AddNumberParameter("Result", "R", "Accumulated result", GH_ParamAccess.item);
+        pManager.AddTextParameter("Elapsed Time", "T", "Time measurements", GH_ParamAccess.list);
     }
 
-    // Static kernel method.
-    private static void MyKernel(Index1D i, ArrayView<double> input, ArrayView<double> output)
+    private static Action<Index1D, double, ArrayView<double>> _cachedKernel;
+
+    // Kernel method
+    private static void Kernel(Index1D i, double seed, ArrayView<double> results)
     {
-        output[i] = Math.Sin(input[i % input.Length]) * Math.Sqrt(i);
+        // Define your kernel logic here
+        double val = Math.Sin(seed) + Math.Cos(seed) + (i % 10);
+        Atomic.Add(ref results[0], val);
     }
 
     protected override void ExecuteKernel(IGH_DataAccess DA)
     {
-        // Get the data size (number of elements to process)
-        int N = 1000000;
-        if (!DA.GetData(1, ref N)) return;
+        List<string> elapsed = new List<string>();
 
-        // Create the input array and initialize it
-        double[] input = new double[N];
-        for (int i = 0; i < N; i++)
+        double seed = 0.0;
+        int totalThreads = 0;
+        if (!DA.GetData(1, ref seed)) return;
+        if (!DA.GetData(2, ref totalThreads)) return;
+
+        // Allocate a buffer
+        using var bufferResult = Accelerator.Allocate1D<double>(1);
+
+        // Compile and cache the kernel
+        if (_cachedKernel == null)
         {
-            input[i] = i * 0.001;
+            _cachedKernel = Accelerator.LoadAutoGroupedStreamKernel<Index1D, double, ArrayView<double>>(Kernel);
         }
 
-        // Start a stopwatch to measure the overall GPU processing time (including memory transfers)
-        Stopwatch sw = Stopwatch.StartNew();
-
-        // Allocate and initialize GPU buffers.
-        using var bufferInput = Accelerator.Allocate1D(input);
-        using var bufferOutput = Accelerator.Allocate1D<double>(N);
-
-        // Compile the kernel.
-        var compiledKernel = Accelerator.LoadAutoGroupedStreamKernel<Index1D, ArrayView<double>, ArrayView<double>>(MyKernel);
-
-        // Execute the kernel.
-        compiledKernel(N, bufferInput.View, bufferOutput.View);
+        // Launch the kernel.
+        _cachedKernel(totalThreads, seed, bufferResult.View);
         Accelerator.Synchronize();
 
-        sw.Stop();
+        // Retrieve the result from the GPU.
+        double[] result = bufferResult.GetAsArray1D();
 
-        // Retrieve the results from the GPU.
-        double[] result = bufferOutput.GetAsArray1D();
-
-        // Output the results and the elapsed time.
-        DA.SetDataList(0, result.ToList());
-        DA.SetData(1, $"{sw.ElapsedMilliseconds} ms");
+        // Output the accumulated result and the elapsed time metrics.
+        DA.SetData(0, result[0]);
+        DA.SetDataList(1, elapsed);
     }
 }
