@@ -226,11 +226,11 @@ namespace GhGpu.CodeEditor
         public override void AddedToDocument(GH_Document document)
         {
             base.AddedToDocument(document);
-            if (!m_hasDeserialized)
-            {
-                EditSourceProject();
-                return;
-            }
+            //if (!m_hasDeserialized)
+            //{
+            //    EditSourceProject();
+            //    return;
+            //}
 
             if (m_pendingComponentLoad)
             {
