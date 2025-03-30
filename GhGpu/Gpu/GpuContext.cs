@@ -32,7 +32,7 @@ namespace GhGpu.Gpu
                 {
                     if (_context == null)
                     {
-                        _context = Context.Create(builder => builder.AllAccelerators());
+                        _context = Context.Create(b => b.Default().EnableAlgorithms());
                     }
                 }
                 return _context;
