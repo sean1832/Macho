@@ -8,7 +8,7 @@ namespace Macho
 {
     internal static class Config
     {
-        public static string Category = "ILGPU";
+        public static string Category = "Macho";
 
         public static class SubCat
         {
