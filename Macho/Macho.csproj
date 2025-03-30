@@ -27,10 +27,25 @@
         <None Remove="Resources\**" />
     </ItemGroup>
     <ItemGroup>
+      <None Include="Resources\Macho.png" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="Resources\KernelScript.png" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="Resources\AcceleratorManager.png" />
+    </ItemGroup>
+    <ItemGroup>
+      <None Include="Resources\AcceleratorParam.png" />
+    </ItemGroup>
+    <ItemGroup>
         <!-- 8.0.23304.9001 -->
         <PackageReference Include="Grasshopper" Version="8.0.23304.9001" ExcludeAssets="runtime" />
         <PackageReference Include="ILGPU" Version="1.5.2" />
         <PackageReference Include="ILGPU.Algorithms" Version="1.5.2" />
+        <PackageReference Include="System.Resources.Extensions" Version="9.0.3">
+          <ExcludeAssets>runtime</ExcludeAssets>
+        </PackageReference>
     </ItemGroup>
     <!-- For Windows only builds -->
     <PropertyGroup Condition="$(TargetFramework.Contains('-windows')) or $(TargetFramework.StartsWith('net4'))">

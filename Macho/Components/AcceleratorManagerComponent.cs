@@ -26,7 +26,7 @@ namespace Macho.Components
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
         public override IEnumerable<string> Keywords => [];
-        protected override Bitmap Icon => null;
+        protected override Bitmap Icon => Resources.AcceleratorManager;
         public override Guid ComponentGuid => new Guid("bf1cf9ff-82e2-47ac-8f0b-f88a1d92e7cd");
 
         #endregion

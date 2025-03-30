@@ -11,6 +11,7 @@ using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel;
 using System;
 using System.Diagnostics;
+using System.Drawing;
 using System.IO.Compression;
 using System.IO;
 using System.Linq;
@@ -22,11 +23,10 @@ namespace Macho.CodeEditor
     public abstract class CodeEditorBase(string name, string nickname, string description)
         : GH_Component(name, nickname, description, Config.Category, Config.SubCat.Operation)
     {
-
+        protected override Bitmap Icon => Resources.KernelScript;
         public sealed override Guid ComponentGuid => new Guid("7ef045a4-bf7d-43bf-9e74-030b30f2496a");
         public sealed override GH_Exposure Exposure => GH_Exposure.primary;
         private static string WorkingDir => Path.Combine(Path.GetTempPath(), Config.Category, "CodeEditor");
-
 
         public override void CreateAttributes()
         {

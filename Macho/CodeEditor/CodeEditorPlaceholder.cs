@@ -6,6 +6,7 @@
  * Modifications made for Macho.CodeEditor under the Apache-2.0 License.
  */
 
+using System.Drawing;
 using Grasshopper.Kernel;
 using System.IO;
 using System.Windows.Forms;
