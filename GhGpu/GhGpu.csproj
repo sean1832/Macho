@@ -14,10 +14,12 @@
     </PropertyGroup>
     <PropertyGroup>
         <!-- Specifies information for Assembly and Yak -->
-        <Version>1.0</Version>
+        <Version>0.0.1</Version>
         <Title>GhGpu</Title>
         <Company>GhGpu Authors</Company>
         <Description>Description of GhGpu</Description>
+        <FileVersion>0.0.1</FileVersion>
+        <AssemblyVersion>0.0.1</AssemblyVersion>
     </PropertyGroup>
     <ItemGroup>
         <Compile Remove="Resources\**" />
