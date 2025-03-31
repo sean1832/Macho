@@ -6,10 +6,10 @@
  * Modifications made for Macho.CodeEditor under the Apache-2.0 License.
  */
 
-using System.Drawing;
 using Grasshopper.Kernel;
 using System.IO;
 using System.Windows.Forms;
+using Macho.Params;
 
 namespace Macho.CodeEditor
 {
@@ -19,6 +19,12 @@ namespace Macho.CodeEditor
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "This is a placeholder. Double click to edit the source code with your native C# editor.");
+        }
+
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        {
+            pManager.AddParameter(new AcceleratorParam(), "Accelerator", "A", "Accelerator to execute on",
+                GH_ParamAccess.item);
         }
 
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
