@@ -54,15 +54,12 @@ namespace Macho.Gpu
             {
                 if (_isDisposed)
                     throw new ObjectDisposedException(nameof(GpuContext), "The GPU context has been disposed.");
-                if (!Accelerators.ContainsKey(deviceIndex))
+                if (!Accelerators.ContainsKey(deviceIndex) || Accelerators[deviceIndex].IsDisposed)
                 {
-                    // Validate the device index against the available devices.
+                    // Validate device index before proceeding
                     if (deviceIndex < 0 || deviceIndex >= SharedContext.Devices.Length)
-                    {
                         throw new IndexOutOfRangeException($"Device index must be between 0 and {SharedContext.Devices.Length - 1}");
-                    }
 
-                    // Create and cache the accelerator.
                     Accelerator accelerator = SharedContext.Devices[deviceIndex].CreateAccelerator(SharedContext);
                     Accelerators[deviceIndex] = accelerator;
                 }
