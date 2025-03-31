@@ -20,6 +20,9 @@ namespace Macho.Gpu
         // Lock for thread safety.
         private static readonly object Lock = new object();
 
+        // Flag to ensure that the shared context is disposed only once.
+        private static bool _isDisposed;
+
         /// <summary>
         /// Gets or creates the shared context.
         /// </summary>
@@ -49,6 +52,8 @@ namespace Macho.Gpu
         {
             lock (Lock)
             {
+                if (_isDisposed)
+                    throw new ObjectDisposedException(nameof(GpuContext), "The GPU context has been disposed.");
                 if (!Accelerators.ContainsKey(deviceIndex))
                 {
                     // Validate the device index against the available devices.
@@ -73,6 +78,8 @@ namespace Macho.Gpu
         {
             lock (Lock)
             {
+                if (_isDisposed)
+                    throw new ObjectDisposedException(nameof(GpuContext), "The GPU context has been disposed.");
                 return SharedContext.Devices.Select(device => device.Name).ToArray();
             }
         }
@@ -84,6 +91,7 @@ namespace Macho.Gpu
         {
             lock (Lock)
             {
+                if (_isDisposed) return;
                 foreach (var accelerator in Accelerators.Values)
                 {
                     accelerator.Dispose();
@@ -91,6 +99,7 @@ namespace Macho.Gpu
                 Accelerators.Clear();
                 _context?.Dispose();
                 _context = null;
+                _isDisposed = true;
             }
         }
     }
