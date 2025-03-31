@@ -2,8 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using ILGPU;
 
 namespace Macho.Gpu
@@ -33,6 +31,8 @@ namespace Macho.Gpu
                 if (_context != null) return _context;
                 lock (Lock)
                 {
+                    if (_isDisposed)
+                        throw new ObjectDisposedException(nameof(GpuContext), "The GPU context has been disposed.");
                     if (_context == null)
                     {
                         _context = Context.Create(b => b.Default().EnableAlgorithms());
