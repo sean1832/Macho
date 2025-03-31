@@ -27,6 +27,8 @@ namespace Macho.Params
 
         public override string ToString()
         {
+            if (Value == null)
+                return "Accelerator [Not Initialized or Disposed]";
             return $"Accelerator [Name:{Value.Device.Name}, Size:{Value.Device.MemorySize}]";
         }
 
